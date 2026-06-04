@@ -3231,6 +3231,31 @@ run(function()
 		Tooltip = 'Sets your sprinting to true.'
 	})
 end)
+	run(function()
+    local DamageBoost
+    local stack
+    
+    DamageBoost = vape.Categories.Blatant:CreateModule({
+    	Name = 'Damage Boost',
+    	Function = function(callback)
+    		if callback then
+    			DamageBoost:Clean(vapeEvents.EntityDamageEvent.Event:Connect(function(damageTable)
+    				if entitylib.isAlive and tick() > (stack or 0) and damageTable.entityInstance == lplr.Character and not LongJump.Enabled then
+    					local horizontal = (damageTable.knockbackMultiplier and damageTable.knockbackMultiplier.horizontal or 0)
+    					knockbackSpeed = bedwars.KnockbackUtil.calculateKnockbackVelocity(Vector3.one, 1, {
+    						vertical = 0,
+    						horizontal = horizontal,
+    					}).Magnitude * (0.9 + lplr:GetNetworkPing())
+                        stack = tick() + (knockbackSpeed / 45)
+                        knockbackBoost = tick() + (horizontal / 3.5)
+    				end
+    			end))
+    		end
+    	end,
+        Tooltip = 'Makes you go slightly faster when damaged'
+    })
+end)
+
 	
 run(function()
 	local TriggerBot
@@ -6518,6 +6543,7 @@ run(function()
 										end
 									end
 								end
+																																			
 
 								if delta.Magnitude > AttackRange.Value then continue end
 								if delta.Magnitude < 14.4 and (tick() - swingCooldown) < math.max(ChargeTime.Value, 0.02) then continue end
