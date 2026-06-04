@@ -6842,11 +6842,11 @@ run(function()
 	local CustomPrediction
 	local HorizontalMultiplier
 	local VerticalMultiplier
-	local DesirePAWorkMode
-	local DesirePAHideCursor
-	local DesirePACursorViewMode
-	local DesirePACursorLimitBow
-	local DesirePACursorShowGUI
+	local SkyPAWorkMode
+	local SkyPAHideCursor
+	local SkyPACursorViewMode
+	local SkyPACursorLimitBow
+	local SkyPACursorShowGUI
 	local cursorRenderConnection
 	local lastGUIState = false
 	local rayCheck = cloneRaycast()
@@ -6941,13 +6941,13 @@ run(function()
 	end
 
 	local function shouldHideCursor()
-		if not DesirePAHideCursor or not DesirePAHideCursor.Enabled then return false end
-		if DesirePACursorShowGUI and DesirePACursorShowGUI.Enabled and isGUIOpen() then return false end
-		if DesirePACursorLimitBow and DesirePACursorLimitBow.Enabled and not hasBowEquipped() then return false end
+		if not SkyPAHideCursor or not SkyPAHideCursor.Enabled then return false end
+		if SkyPACursorShowGUI and SkyPACursorShowGUI.Enabled and isGUIOpen() then return false end
+		if SkyPACursorLimitBow and SkyPACursorLimitBow.Enabled and not hasBowEquipped() then return false end
 		local inFirstPerson = isFirstPerson()
-		if DesirePACursorViewMode then
-			if DesirePACursorViewMode.Value == 'First Person' then return inFirstPerson
-			elseif DesirePACursorViewMode.Value == 'Third Person' then return not inFirstPerson
+		if SkyPACursorViewMode then
+			if SkyPACursorViewMode.Value == 'First Person' then return inFirstPerson
+			elseif SkyPACursorViewMode.Value == 'Third Person' then return not inFirstPerson
 			end
 		end
 		return true
@@ -6966,10 +6966,10 @@ run(function()
 	end
 
 	local function shouldPAWork()
-		if not DesirePAWorkMode then return true end
+		if not SkyPAWorkMode then return true end
 		local inFirstPerson = isFirstPerson()
-		if DesirePAWorkMode.Value == 'First Person' then return inFirstPerson
-		elseif DesirePAWorkMode.Value == 'Third Person' then return not inFirstPerson
+		if SkyPAWorkMode.Value == 'First Person' then return inFirstPerson
+		elseif SkyPAWorkMode.Value == 'Third Person' then return not inFirstPerson
 		end
 		return true
 	end
@@ -7085,7 +7085,7 @@ run(function()
 				if PAFOVCircle then
 					runPAFOVCircle(PAFOVCircle.Enabled)
 				end
-				if DesirePAHideCursor and DesirePAHideCursor.Enabled and not cursorRenderConnection then
+				if SkyPAHideCursor and SkyPAHideCursor.Enabled and not cursorRenderConnection then
 					cursorRenderConnection = runService.RenderStepped:Connect(function()
 						checkGUIState()
 						updateCursor()
@@ -7333,7 +7333,7 @@ run(function()
 		Tooltip = 'Prioritize targets when multiple are in range'
 	})
 
-	DesirePAWorkMode = ProjectileAimbot:CreateDropdown({
+	SkyPAWorkMode = ProjectileAimbot:CreateDropdown({
 		Name = 'PA Work Mode',
 		List = {'First Person', 'Third Person', 'Both'},
 		Default = 'Both',
@@ -7393,14 +7393,14 @@ run(function()
 	end
 	updateRandomizeVisibility()
 
-	DesirePAHideCursor = ProjectileAimbot:CreateToggle({
+	SkyPAHideCursor = ProjectileAimbot:CreateToggle({
 		Name = 'Hide Cursor',
 		Default = false,
 		Tooltip = 'Hides the cursor while aiming',
 		Function = function(callback)
-			if DesirePACursorViewMode then DesirePACursorViewMode.Object.Visible = callback end
-			if DesirePACursorLimitBow then DesirePACursorLimitBow.Object.Visible = callback end
-			if DesirePACursorShowGUI then DesirePACursorShowGUI.Object.Visible = callback end
+			if SkyPACursorViewMode then SkyPACursorViewMode.Object.Visible = callback end
+			if SkyPACursorLimitBow then SkyPACursorLimitBow.Object.Visible = callback end
+			if SkyPACursorShowGUI then SkyPACursorShowGUI.Object.Visible = callback end
 			if callback and ProjectileAimbot.Enabled then
 				if not cursorRenderConnection then
 					cursorRenderConnection = runService.RenderStepped:Connect(function()
@@ -7423,38 +7423,38 @@ run(function()
 		end
 	})
 
-	DesirePACursorViewMode = ProjectileAimbot:CreateDropdown({
+	SkyPACursorViewMode = ProjectileAimbot:CreateDropdown({
 		Name = 'Cursor View Mode',
 		List = {'First Person', 'Third Person', 'Both'},
 		Default = 'First Person',
 		Darker = true,
 		Visible = false,
 		Function = function()
-			if ProjectileAimbot.Enabled and DesirePAHideCursor.Enabled then
+			if ProjectileAimbot.Enabled and SkyPAHideCursor.Enabled then
 				updateCursor()
 			end
 		end
 	})
 
-	DesirePACursorLimitBow = ProjectileAimbot:CreateToggle({
+	SkyPACursorLimitBow = ProjectileAimbot:CreateToggle({
 		Name = 'Limit to Bow',
 		Darker = true,
 		Visible = false,
 		Tooltip = 'Only hides cursor when bow/crossbow is equipped',
 		Function = function()
-			if ProjectileAimbot.Enabled and DesirePAHideCursor.Enabled then
+			if ProjectileAimbot.Enabled and SkyPAHideCursor.Enabled then
 				updateCursor()
 			end
 		end
 	})
 
-	DesirePACursorShowGUI = ProjectileAimbot:CreateToggle({
+	SkyPACursorShowGUI = ProjectileAimbot:CreateToggle({
 		Name = 'Show on GUI',
 		Darker = true,
 		Visible = false,
 		Tooltip = 'Shows cursor when a GUI is open',
 		Function = function()
-			if ProjectileAimbot.Enabled and DesirePAHideCursor.Enabled then
+			if ProjectileAimbot.Enabled and SkyPAHideCursor.Enabled then
 				updateCursor()
 			end
 		end
@@ -34611,6 +34611,242 @@ run(function()
 			end
 		end,
 	}
+	run(function()
+	local AutoVulcan
+	local Targets
+	local Sort
+	local Distance
+	local Prediction
+
+	local NetManaged = game:GetService("ReplicatedStorage").rbxts_include.node_modules["@rbxts"].net.out._NetManaged
+	local AimTurretRemote = NetManaged:FindFirstChild("AimTurret")
+	local ProjectileFireRemote = NetManaged:FindFirstChild("ProjectileFire")
+	local ProjectileHitRemote = NetManaged:FindFirstChild("ProjectileHit")
+	local RaycastTurretRemote = NetManaged:FindFirstChild("RaycastTurret")
+
+	local turretFireTimes = {}
+	local turretTargets = {}
+	local turretThreads = {}
+
+	local function tableFind(tab, val)
+		for _, v in ipairs(tab) do
+			if v == val then return true end
+		end
+		return false
+	end
+
+	local function getOwnedTurrets()
+		local turrets = {}
+		for _, block in ipairs(store.blocks or {}) do
+			if block.Name == "camera_turret"
+				and block:GetAttribute("PlacedByUserId") == lplr.UserId
+				and block.Parent
+			then
+				table.insert(turrets, block)
+			end
+		end
+		return turrets
+	end
+
+	local function isTargetValid(ent, turretPos)
+		if not ent or not ent.Character then return false end
+		if not ent.RootPart or not ent.RootPart.Parent then return false end
+		if (ent.Character:GetAttribute("Health") or 0) <= 0 then return false end
+		if (turretPos - ent.RootPart.Position).Magnitude > (Distance and Distance.Value or 1000) then return false end
+		return true
+	end
+
+	local function getTarget(turret)
+		local turretPos = turret.Position
+		local locked = turretTargets[turret]
+		if isTargetValid(locked, turretPos) then
+			return locked
+		end
+
+		local ent = entitylib.EntityPosition({
+			Origin = turretPos,
+			Range = Distance and Distance.Value or 1000,
+			Part = "RootPart",
+			Players = Targets and Targets.Players.Enabled or true,
+			NPCs = Targets and Targets.NPCs.Enabled or true,
+			Sort = sortmethods[Sort and Sort.Value or 'Distance'] or sortmethods.Distance,
+		})
+
+		turretTargets[turret] = ent
+		return ent
+	end
+
+	local function fireTurret(turret)
+		if not turret or not turret.Parent then return end
+
+		local turretPos = turret.Position
+		local blockPos = bedwars.BlockController:getBlockPosition(turretPos)
+		local ent = getTarget(turret)
+		if not ent or not ent.RootPart then return end
+
+		local torso = ent.Character:FindFirstChild("UpperTorso")
+			or ent.Character:FindFirstChild("Torso")
+			or ent.RootPart
+		local targetPos = torso.Position
+
+		if Prediction and Prediction.Enabled then
+			local vel = ent.RootPart.Velocity or Vector3.zero
+			local travelTime = math.max((turretPos - targetPos).Magnitude / 300, 0.01)
+			targetPos = targetPos + Vector3.new(vel.X, vel.Y * 0.3, vel.Z) * travelTime
+		end
+
+		local lookDir = targetPos - turretPos
+		if lookDir.Magnitude < 0.1 then return end
+		lookDir = lookDir.Unit
+
+		local flatMag = Vector3.new(lookDir.X, 0, lookDir.Z).Magnitude
+		local yaw = math.atan2(-lookDir.X, -lookDir.Z)
+		local pitch = math.atan2(lookDir.Y, flatMag > 0 and flatMag or 0.001)
+
+		if AimTurretRemote then
+			pcall(function()
+				AimTurretRemote:FireServer({
+					angleX = math.deg(pitch),
+					angleY = math.deg(yaw),
+					turretBlockPos = blockPos,
+				})
+			end)
+		end
+
+		local now = tick()
+		if (now - (turretFireTimes[turret] or 0)) < 0.08 then return end
+		turretFireTimes[turret] = now
+
+		local fireId = httpService:GenerateGUID(false):sub(1, 8)
+		local shotId = httpService:GenerateGUID(false):sub(1, 8)
+		local targetChar = ent.Character
+		local shootOrigin = turretPos + lookDir * 2 + Vector3.new(0, 1, 0)
+		local velocity = lookDir * 300
+
+		task.spawn(function()
+			local firedId
+			if ProjectileFireRemote then
+				pcall(function()
+					firedId = ProjectileFireRemote:InvokeServer(
+						turret, nil, "turretBullet",
+						shootOrigin, turretPos, velocity,
+						fireId,
+						{ shotId = shotId, drawDurationSec = 0 },
+						workspace:GetServerTimeNow() - 0.045
+					)
+				end)
+			elseif RaycastTurretRemote then
+				pcall(function()
+					local targetDir = (targetPos - turretPos).Unit * 500
+					RaycastTurretRemote:FireServer(turret, turretPos + Vector3.new(0, 1, 0), targetDir, blockPos)
+				end)
+			end
+
+			if not firedId then
+				turretTargets[turret] = nil
+				return
+			end
+
+			task.wait(0.05)
+			if not targetChar or not targetChar.Parent then return end
+			if (targetChar:GetAttribute("Health") or 0) <= 0 then return end
+
+			if ProjectileHitRemote then
+				pcall(function() ProjectileHitRemote:FireServer(firedId, targetChar) end)
+				task.wait(0.02)
+				if targetChar and targetChar.Parent and (targetChar:GetAttribute("Health") or 0) > 0 then
+					pcall(function() ProjectileHitRemote:FireServer(firedId, targetChar) end)
+				end
+			end
+		end)
+	end
+
+	local function startTurretLoop(turret)
+		if turretThreads[turret] then return end
+
+		turretThreads[turret] = task.spawn(function()
+			while AutoVulcan.Enabled and turret and turret.Parent do
+				if entitylib.isAlive then
+					pcall(fireTurret, turret)
+				end
+				task.wait(0.08)
+			end
+			turretThreads[turret] = nil
+			turretTargets[turret] = nil
+			turretFireTimes[turret] = nil
+		end)
+	end
+
+	local function stopAllLoops()
+		for _, thread in pairs(turretThreads) do
+			pcall(task.cancel, thread)
+		end
+		table.clear(turretThreads)
+		table.clear(turretTargets)
+		table.clear(turretFireTimes)
+	end
+
+	AutoVulcan = vape.Categories.Kits:CreateModule({
+		Name = 'Auto Vulcan',
+		Tooltip = 'All turrets auto aim',
+		Function = function(callback)
+			if callback then
+				AutoVulcan:Clean(task.spawn(function()
+					while AutoVulcan.Enabled do
+						for _, turret in ipairs(getOwnedTurrets()) do
+							startTurretLoop(turret)
+						end
+						for turret, thread in pairs(turretThreads) do
+							if not turret.Parent then
+								pcall(task.cancel, thread)
+								turretThreads[turret] = nil
+								turretTargets[turret] = nil
+								turretFireTimes[turret] = nil
+							end
+						end
+						task.wait(1)
+					end
+				end))
+				AutoVulcan:Clean(stopAllLoops)
+			else
+				stopAllLoops()
+			end
+		end,
+	})
+
+	Targets = AutoVulcan:CreateTargets({
+		Players = true,
+		NPCs = true,
+		Walls = false,
+	})
+
+	Distance = AutoVulcan:CreateSlider({
+		Name = 'Distance',
+		Min = 1,
+		Max = 1000,
+		Default = 1000,
+		Suffix = function(val) return val == 1 and 'stud' or 'studs' end,
+	})
+
+	local methods = { 'Distance', 'Health' }
+	for i, _ in pairs(sortmethods) do
+		if not tableFind(methods, i) then
+			table.insert(methods, i)
+		end
+	end
+
+	Sort = AutoVulcan:CreateDropdown({
+		Name = 'Target mode',
+		List = methods,
+		Default = 'Distance',
+	})
+
+	Prediction = AutoVulcan:CreateToggle({
+		Name = 'Prediction',
+		Default = true,
+		Tooltip = 'Predicts target movement.',
+	})
+end)																
 	
 	local function applyAura()
 		removeAura()
