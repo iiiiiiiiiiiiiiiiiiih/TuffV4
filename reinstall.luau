@@ -7,7 +7,7 @@ if isfolder('catrewrite') then
 end
 
 cloneref(game:GetService('StarterGui')):SetCore('SendNotification', {
-    Title = 'KingV4',
+    Title = 'TuffV4',
     Text = 'Successfully reinstalled Cat Vape, Please rejoin the game to take effect',
     Duration = 20
 })
