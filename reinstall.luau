@@ -8,6 +8,6 @@ end
 
 cloneref(game:GetService('StarterGui')):SetCore('SendNotification', {
     Title = 'TuffV4',
-    Text = 'Successfully reinstalled Cat Vape, Please rejoin the game to take effect',
+    Text = 'Successfully reinstalled Tuff Vape, Please rejoin the game to take effect',
     Duration = 20
 })
